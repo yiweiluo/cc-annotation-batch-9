@@ -1,0 +1,1163 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+
+        <title>browser-based experiments</title>
+
+        <!-- fonts from Google fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Noto+Serif:400,700|Playfair+Display:700" rel="stylesheet">
+
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="styles/styles.css">
+
+        <!-- js dependencies -->
+        <script src="libraries/mustache/mustache.min.js"></script>
+        <script src="libraries/jquery/dist/jquery.min.js"></script>
+        <!-- This doesn't seem to be there on cloudflare -->
+        <script src="libraries/csv-js/csv.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.js"></script>
+
+        <!-- config -->
+        <script src="config/config_deploy.js"></script>
+
+        <!-- local js files -->
+        <script src="scripts/main.js"></script>
+        <script src="scripts/experiment.js"></script>
+        <script src="scripts/helpers.js"></script>
+        <script src="scripts/utils.js"></script>
+        <script src="scripts/submit_to_server.js"></script>
+
+        <!-- local trial_info files -->
+        <script src="trial_info/main_trials_batch_0.js"></script>
+        <script src="trial_info/practice_trials.js"></script>
+
+        <!-- views -->
+        <script src="views/views.js"></script>
+
+        <script src="//uniqueturker.myleott.com/lib.js" type="text/javascript"></script>
+          <script type="text/javascript">
+          $(document).ready(function(){
+            var ut_id = "63a45753b5f206598d75b955a2240db4";
+            if (UTWorkerLimitReached(ut_id)) {
+                $(".slide").hide();
+                $("body").html("You have already completed the maximum number of HITs allowed by this requester. Please click 'Return HIT' to avoid any impact on your approval rating.");
+            }
+          });
+        </script>
+
+    </head>
+
+    <body>
+        <noscript>This task requires JavaScript. Please enable JavaScript in your browser and reload the page. For more information on how to do that, please refer to
+            <a href='https://enable-javascript.com' target='_blank'>enable-javascript.com</a>
+        </noscript>
+
+        <!-- views are inserted in main -->
+        <main id='main'>
+            Loading...
+        </main>
+
+        <!-- Mustache templates below. Each template is a view with a separate HTML structure. -->
+        <script id="botcaptcha-view" type="text/html">
+            <div class='view'>
+
+                {{# title }}
+                <h1>{{ title }}</h1>
+                {{/ title }}
+                <br>
+                {{{# text }}}
+                <section class="text-container">
+                    <p align="center" class="text">{{{ text }}}</p>
+                </section>
+                {{{/ text }}}
+                <br>
+                {{{# question }}}
+                <section class="text-container">
+                    <p align="center" class="text" id="quest-response">
+                        {{{ question }}}
+                        <textarea rows="1" cols="15" id="listener-response"></textarea>
+                    </p>
+                </section>
+                {{{/ question }}}
+                <br>
+                {{# button }}
+                <button id="next">{{ button }}</button>
+                {{/ button }}
+                {{^ button }}
+                <button id="next">Next</button>
+                {{/ button }}
+                <section class="answer-container">
+                    <p class="text" id="error_incorrect" style="color: #7CB637">This is incorrect.</p>
+                    <p class="text" id="error_2more" style="color: #7CB637">You have 2 more trials.</p>
+                    <p class="text" id="error_1more" style="color: #7CB637">You have 1 more trial.</p>
+                    <p class="text" id="error" style="color: #7CB637">Error: You failed to enter the correct response.</p>
+                </section>
+
+            </div>
+        </script>
+
+        <!-- Introduction view -->
+        <script id="intro-view" type="x-tmpl-mustache">
+        <div class='view'>
+            {{# title }}
+            <h1 class="title">{{ title }}</h1>
+            {{/ title }}
+            {{# text }}
+            <section class="text-container">
+                <p class="text">{{ text }}</p>
+            </section>
+            {{/ text }}
+            {{# button }}
+            <button id="next">{{ button }}</button>
+            {{/ button }}
+            {{^ button }}
+            <button id="next">Begin Experiment</button>
+            {{/ button }}
+            {{# legal_info }}
+                  <section class="text-container">
+                      <hr>
+                      <br>
+                      <p class="legal-text">{{{ legal_info }}}</p>
+                  </section>
+            {{/ legal_info }}
+        </div>
+        </script>
+
+        <!-- warning view (buttons response) -->
+        <script id="warning-view" type="x-tmpl-mustache">
+        <div class="view">
+
+          <p align="left">
+          Please read the instructions on the next page carefully. <br><br>We check responses in order to make sure
+          that people have read the instructions for the task and responded thoughtfully. <br><br>We will only accept participants
+          who clearly demonstrate that they have understood the task.
+          </p>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+        </div>
+        </script>
+
+        <!-- postpractice view (buttons response) -->
+        <script id="postpractice-view" type="x-tmpl-mustache">
+        <div class="view">
+
+          <p align="center">
+          Great practice! You can now begin the main trials.
+          </p>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+        </div>
+        </script>
+
+        <!-- instructions view (buttons response) -->
+        <script id="instructions-view" type="x-tmpl-mustache">
+        <div class="view">
+
+          <p align="left">
+          For each sentence, you will judge whether its writer is likely to support the target opinion below:
+          </p>
+
+          <p class="question">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p align="left">
+          There are three options you may choose from:
+          <p class="tab"><br>1. AGREES (the writer probably agrees with the target opinion)</p>
+          <p class="helpText">This could be for any of reasons shown below:
+          <br>– the writer mentions <strong>explicit support</strong> for the target
+          <br>– the writer mentions <strong>support for something/someone aligned
+          with the target</strong>,
+          <br>– the writer mentions <strong>opposition to something/someone opposing the target</strong></p>
+          <p class="tab"><br>2. DISAGREES (the writer probably disagrees with the target opinion)</p>
+          <p class="helpText">This could be for any of the following:
+          <br>– the writer mentions <strong>explicit opposition</strong> to the target
+          <br>– the writer mentions <strong>opposition to someone/something aligned with
+          the target</strong>,
+          <br>– the writer mentions <strong>support for someone/something opposing the target</strong></p>
+          <p class="tab"><br>3. NEUTRAL (it is unclear whether or not the writer supports the target opinion)</p>
+          <p class="helpText">The writer could be either in support of or against the target; the sentence does not reveal the writer&#39;s stance.</p>
+          </p>
+
+          <p align="left">
+          <br><br>You will now be guided through 6 examples, before going on to complete the main trials.
+          </p>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+        </div>
+        </script>
+
+        <!-- practice1 view (buttons response) -->
+        <script id="practice1-view" type="x-tmpl-mustache">
+        <div class="view">
+
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+        <p name="answer-box" class="answer-container">
+            <label for="yes" class="button-answer">{{ option1 }}</label>
+            <input type="radio" name="answer" id="yes" value={{ option1 }} />
+            <input type="radio" name="answer" id="no" value={{ option2 }} />
+            <input type="radio" name="answer" id="neutral" value={{ option3 }} />
+            <label for="no" class="button-answer">{{ option2 }}</label>
+            <label for="neutral" class="button-answer">{{ option3 }}</label>
+        </p>
+
+        <hr>
+        <p class="tab"><br>1. AGREES (the writer probably agrees with the target opinion)</p>
+        <p class="helpText">This could be for any of reasons shown below:
+        <br>– the writer mentions <strong>explicit support</strong> for the target
+        <br>– the writer mentions <strong>support for something/someone aligned
+        with the target</strong>,
+        <br>– the writer mentions <strong>opposition to something/someone opposing the target</strong></p>
+        <p class="tab"><br>2. DISAGREES (the writer probably disagrees with the target opinion)</p>
+        <p class="helpText">This could be for any of the following:
+        <br>– the writer mentions <strong>explicit opposition</strong> to the target
+        <br>– the writer mentions <strong>opposition to someone/something aligned with
+        the target</strong>,
+        <br>– the writer mentions <strong>support for someone/something opposing the target</strong></p>
+        <p class="tab"><br>3. NEUTRAL (it is unclear whether or not the writer supports the target opinion)</p>
+        <p class="helpText">TThe writer could be either in support of or against the target; the sentence does not reveal the writer&#39;s stance.</p>
+        </div>
+        </script>
+
+        <!-- practice2 view (buttons response) -->
+        <script id="practice2-view" type="x-tmpl-mustache">
+        <div class="view">
+
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+        <p name="answer-box" class="answer-container">
+            <label for="yes" class="button-answer">{{ option1 }}</label>
+            <input type="radio" name="answer" id="yes" value={{ option1 }} />
+            <input type="radio" name="answer" id="no" value={{ option2 }} />
+            <input type="radio" name="answer" id="neutral" value={{ option3 }} />
+            <label for="no" class="button-answer">{{ option2 }}</label>
+            <label for="neutral" class="button-answer">{{ option3 }}</label>
+        </p>
+
+        <hr>
+        <p class="tab"><br>1. AGREES (the writer probably agrees with the target opinion)</p>
+        <p class="helpText">This could be for any of reasons shown below:
+        <br>– the writer mentions <strong>explicit support</strong> for the target
+        <br>– the writer mentions <strong>support for something/someone aligned
+        with the target</strong>,
+        <br>– the writer mentions <strong>opposition to something/someone opposing the target</strong></p>
+        <p class="tab"><br>2. DISAGREES (the writer probably disagrees with the target opinion)</p>
+        <p class="helpText">This could be for any of the following:
+        <br>– the writer mentions <strong>explicit opposition</strong> to the target
+        <br>– the writer mentions <strong>opposition to someone/something aligned with
+        the target</strong>,
+        <br>– the writer mentions <strong>support for someone/something opposing the target</strong></p>
+        <p class="tab"><br>3. NEUTRAL (it is unclear whether or not the writer supports the target opinion)</p>
+        <p class="helpText">The writer could be either in support of or against the target; the sentence does not reveal the writer&#39;s stance.</p>
+        </div>
+        </script>
+
+        <!-- practice2 view (buttons response) -->
+        <script id="practice3-view" type="x-tmpl-mustache">
+        <div class="view">
+
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+        <p name="answer-box" class="answer-container">
+            <label for="yes" class="button-answer">{{ option1 }}</label>
+            <input type="radio" name="answer" id="yes" value={{ option1 }} />
+            <input type="radio" name="answer" id="no" value={{ option2 }} />
+            <input type="radio" name="answer" id="neutral" value={{ option3 }} />
+            <label for="no" class="button-answer">{{ option2 }}</label>
+            <label for="neutral" class="button-answer">{{ option3 }}</label>
+        </p>
+
+        <hr>
+        <p class="tab"><br>1. AGREES (the writer probably agrees with the target opinion)</p>
+        <p class="helpText">This could be for any of reasons shown below:
+        <br>– the writer mentions <strong>explicit support</strong> for the target
+        <br>– the writer mentions <strong>support for something/someone aligned
+        with the target</strong>,
+        <br>– the writer mentions <strong>opposition to something/someone opposing the target</strong></p>
+        <p class="tab"><br>2. DISAGREES (the writer probably disagrees with the target opinion)</p>
+        <p class="helpText">This could be for any of the following:
+        <br>– the writer mentions <strong>explicit opposition</strong> to the target
+        <br>– the writer mentions <strong>opposition to someone/something aligned with
+        the target</strong>,
+        <br>– the writer mentions <strong>support for someone/something opposing the target</strong></p>
+        <p class="tab"><br>3. NEUTRAL (it is unclear whether or not the writer supports the target opinion)</p>
+        <p class="helpText">The writer could be either in support of or against the target; the sentence does not reveal the writer&#39;s stance.</p>
+        </div>
+        </script>
+
+        <!-- practice3 view (buttons response) -->
+        <script id="practice4-view" type="x-tmpl-mustache">
+        <div class="view">
+
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+        <p name="answer-box" class="answer-container">
+            <label for="yes" class="button-answer">{{ option1 }}</label>
+            <input type="radio" name="answer" id="yes" value={{ option1 }} />
+            <input type="radio" name="answer" id="no" value={{ option2 }} />
+            <input type="radio" name="answer" id="neutral" value={{ option3 }} />
+            <label for="no" class="button-answer">{{ option2 }}</label>
+            <label for="neutral" class="button-answer">{{ option3 }}</label>
+        </p>
+
+        <hr>
+        <p class="tab"><br>1. AGREES (the writer probably agrees with the target opinion)</p>
+        <p class="helpText">This could be for any of reasons shown below:
+        <br>– the writer mentions <strong>explicit support</strong> for the target
+        <br>– the writer mentions <strong>support for something/someone aligned
+        with the target</strong>,
+        <br>– the writer mentions <strong>opposition to something/someone opposing the target</strong></p>
+        <p class="tab"><br>2. DISAGREES (the writer probably disagrees with the target opinion)</p>
+        <p class="helpText">This could be for any of the following:
+        <br>– the writer mentions <strong>explicit opposition</strong> to the target
+        <br>– the writer mentions <strong>opposition to someone/something aligned with
+        the target</strong>,
+        <br>– the writer mentions <strong>support for someone/something opposing the target</strong></p>
+        <p class="tab"><br>3. NEUTRAL (it is unclear whether or not the writer supports the target opinion)</p>
+        <p class="helpText">The writer could be either in support of or against the target; the sentence does not reveal the writer&#39;s stance.</p>
+        </div>
+        </script>
+
+        <!-- practice4 view (buttons response) -->
+        <script id="practice5-view" type="x-tmpl-mustache">
+        <div class="view">
+
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+        <p name="answer-box" class="answer-container">
+            <label for="yes" class="button-answer">{{ option1 }}</label>
+            <input type="radio" name="answer" id="yes" value={{ option1 }} />
+            <input type="radio" name="answer" id="no" value={{ option2 }} />
+            <input type="radio" name="answer" id="neutral" value={{ option3 }} />
+            <label for="no" class="button-answer">{{ option2 }}</label>
+            <label for="neutral" class="button-answer">{{ option3 }}</label>
+        </p>
+
+        <hr>
+        <p class="tab"><br>1. AGREES (the writer probably agrees with the target opinion)</p>
+        <p class="helpText">This could be for any of reasons shown below:
+        <br>– the writer mentions <strong>explicit support</strong> for the target
+        <br>– the writer mentions <strong>support for something/someone aligned
+        with the target</strong>,
+        <br>– the writer mentions <strong>opposition to something/someone opposing the target</strong></p>
+        <p class="tab"><br>2. DISAGREES (the writer probably disagrees with the target opinion)</p>
+        <p class="helpText">This could be for any of the following:
+        <br>– the writer mentions <strong>explicit opposition</strong> to the target
+        <br>– the writer mentions <strong>opposition to someone/something aligned with
+        the target</strong>,
+        <br>– the writer mentions <strong>support for someone/something opposing the target</strong></p>
+        <p class="tab"><br>3. NEUTRAL (it is unclear whether or not the writer supports the target opinion)</p>
+        <p class="helpText">The writer could be either in support of or against the target; the sentence does not reveal the writer&#39;s stance.</p>
+        </div>
+        </script>
+
+        <!-- practice5 view (buttons response) -->
+        <script id="practice6-view" type="x-tmpl-mustache">
+        <div class="view">
+
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+        <p name="answer-box" class="answer-container">
+            <label for="yes" class="button-answer">{{ option1 }}</label>
+            <input type="radio" name="answer" id="yes" value={{ option1 }} />
+            <input type="radio" name="answer" id="no" value={{ option2 }} />
+            <input type="radio" name="answer" id="neutral" value={{ option3 }} />
+            <label for="no" class="button-answer">{{ option2 }}</label>
+            <label for="neutral" class="button-answer">{{ option3 }}</label>
+        </p>
+
+        <hr>
+        <p class="tab"><br>1. AGREES (the writer probably agrees with the target opinion)</p>
+        <p class="helpText">This could be for any of reasons shown below:
+        <br>– the writer mentions <strong>explicit support</strong> for the target
+        <br>– the writer mentions <strong>support for something/someone aligned
+        with the target</strong>,
+        <br>– the writer mentions <strong>opposition to something/someone opposing the target</strong></p>
+        <p class="tab"><br>2. DISAGREES (the writer probably disagrees with the target opinion)</p>
+        <p class="helpText">This could be for any of the following:
+        <br>– the writer mentions <strong>explicit opposition</strong> to the target
+        <br>– the writer mentions <strong>opposition to someone/something aligned with
+        the target</strong>,
+        <br>– the writer mentions <strong>support for someone/something opposing the target</strong></p>
+        <p class="tab"><br>3. NEUTRAL (it is unclear whether or not the writer supports the target opinion)</p>
+        <p class="helpText">The writer could be either in support of or against the target; the sentence does not reveal the writer&#39;s stance.</p>
+        </div>
+        </script>
+
+        <!-- feedback view (buttons response) -->
+        <script id="feedback1-view" type="x-tmpl-mustache">
+        <div class="view">
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+          <p align="left">
+          <strong>Correct choice</strong>: AGREES. <br><strong>Explanation</strong>: In this sentence, the writer explicitly includes information in support of the target opinion by mentioning <font color="red"><strong>greenhouse gases as a cause of global warming</strong></font> and by citing its <font color="red"><strong>negative effects</strong></font>. Moreover, the
+          writer&#8217;s use of words like <font color="red"><strong>'catastrophic'</strong></font> and <font color="red"><strong>'poured'</strong></font> as opposed to more neutral choices like 'adverse' or 'released' shows a strongly negative attitude towards greenhouse gas emissions.
+          </p>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+
+        </div>
+        </script>
+
+        <!-- feedback view (buttons response) -->
+        <script id="feedback2-view" type="x-tmpl-mustache">
+        <div class="view">
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+          <p align="left">
+          <strong>Correct choice</strong>: NEUTRAL. <br><strong>Explanation</strong>: In this sentence, the writer merely echoes a prediction made by scientists, so their own stance towards climate change is unclear.
+          </p>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+
+        </div>
+        </script>
+
+        <!-- feedback view (buttons response) -->
+        <script id="feedback3-view" type="x-tmpl-mustache">
+        <div class="view">
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+          <p align="left">
+          <strong>Correct choice</strong>: NEUTRAL. <br><strong>Explanation</strong>: Here, the writer does not include information explicitly in support of the target opinion. Although the writer expresses the importance of preserving ecosystems, it remains unclear as to how they might feel about global warming.
+          </p>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+
+        </div>
+        </script>
+
+        <!-- feedback view (buttons response) -->
+        <script id="feedback4-view" type="x-tmpl-mustache">
+        <div class="view">
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+          <p align="left">
+          <strong>Correct choice</strong>: NEUTRAL. <br><strong>Explanation</strong>: Similar to the previous sentence, the writer does not include information explicitly for or against the target opinion. It is also unclear as to whether the writer feels society should now end its reliance on fossil fuels, or continue to use them,
+          so we cannot infer how the writer feels about climate change.
+          </p>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+
+        </div>
+        </script>
+
+        <!-- feedback view (buttons response) -->
+        <script id="feedback5-view" type="x-tmpl-mustache">
+        <div class="view">
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+          <p align="left">
+          <strong>Correct choice</strong>: DISAGREES. <br><strong>Explanation</strong>: In this sentence, the writer casts doubt on the legitimacy of climate change research, in line with a skeptical view of climate change and its seriousness.
+          </p>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+
+        </div>
+        </script>
+
+        <!-- feedback view (buttons response) -->
+        <script id="feedback6-view" type="x-tmpl-mustache">
+        <div class="view">
+          <p align="left">
+          <strong>Target opinion: Climate change/global warming is a serious concern.</strong>
+          </p>
+
+          <p class="question">
+          {{# sentence }}
+          {{{ sentence }}}
+          {{/ sentence }}
+          </p>
+
+          <p align="left">
+          <strong>Correct choice</strong>: NEUTRAL. <br><strong>Explanation</strong>: This sentence talks about a process that will be banned by Governor Cuomo of New York and the DEC. Depending on how much you know about New York environmental politics, you could infer that the process referred to is fracking, a means of extracting natural gas and contributor to CO2 emissions. However, there is still insufficient information in the sentence to know how the writer feels about a ban on fracking.
+          </p>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+
+        </div>
+        </script>
+
+        <!-- main view (buttons response) -->
+        <script id="main-view" type="x-tmpl-mustache">
+        <div class="view">
+
+        <p align="left">
+        Target opinion: Climate change/global warming is a serious concern.
+        </p>
+
+        <p class="question">
+        {{# sentence }}
+        <strong>{{{ sentence }}}</strong>
+        {{/ sentence }}
+        </p>
+
+        <p name="answer-box" class="answer-container">
+            <label for="yes" class="button-answer">{{ option1 }}</label>
+            <input type="radio" name="answer" id="yes" value={{ option1 }} />
+            <input type="radio" name="answer" id="no" value={{ option2 }} />
+            <input type="radio" name="answer" id="neutral" value={{ option3 }} />
+            <label for="no" class="button-answer">{{ option2 }}</label>
+            <label for="neutral" class="button-answer">{{ option3 }}</label>
+        </p>
+
+
+        <hr>
+        <p class="tab"><br>1. AGREES (the writer probably agrees with the target opinion)</p>
+        <p class="helpText">This could be for any of reasons shown below:
+        <br>– the writer mentions <strong>explicit support</strong> for the target
+        <br>– the writer mentions <strong>support for something/someone aligned
+        with the target</strong>,
+        <br>– the writer mentions <strong>opposition to something/someone opposing the target</strong></p>
+        <p class="tab"><br>2. DISAGREES (the writer probably disagrees with the target opinion)</p>
+        <p class="helpText">This could be for any of the following:
+        <br>– the writer mentions <strong>explicit opposition</strong> to the target
+        <br>– the writer mentions <strong>opposition to someone/something aligned with
+        the target</strong>,
+        <br>– the writer mentions <strong>support for someone/something opposing the target</strong></p>
+        <p class="tab"><br>3. NEUTRAL (it is unclear whether or not the writer supports the target opinion)</p>
+        <p class="helpText">The writer could be either in support of or against the target; the sentence does not reveal the writer&#39;s stance.</p>
+        </div>
+        </script>
+
+        <!-- debrief view (buttons response) -->
+        <script id="debrief-view" type="x-tmpl-mustache">
+        <div class="view">
+
+        <p align="left">
+        Target opinion: Climate change/global warming is a serious concern.
+        </p>
+
+        <p class="question">
+        {{# sentence }}
+        <strong>{{{ sentence }}}</strong>
+        {{/ sentence }}
+        </p>
+
+        <p align="left">
+        For the above sentence, you chose: {{# t19_choice }}{{ t19_choice }}{{/ t19_choice }}. <br><br>Please briefly explain your choice below.
+        </p>
+
+        <p class="comment-sect">
+            <textarea name="t19_comments" id="t19_comments"
+            rows="6" cols="110"></textarea>
+        </p>
+
+        <hr>
+        <p class="tab"><br>1. AGREES (the writer probably agrees with the target opinion)</p>
+        <p class="helpText">This could be for any of reasons shown below:
+        <br>– the writer mentions <strong>explicit support</strong> for the target
+        <br>– the writer mentions <strong>support for something/someone aligned
+        with the target</strong>,
+        <br>– the writer mentions <strong>opposition to something/someone opposing the target</strong></p>
+        <p class="tab"><br>2. DISAGREES (the writer probably disagrees with the target opinion)</p>
+        <p class="helpText">This could be for any of the following:
+        <br>– the writer mentions <strong>explicit opposition</strong> to the target
+        <br>– the writer mentions <strong>opposition to someone/something aligned with
+        the target</strong>,
+        <br>– the writer mentions <strong>support for someone/something opposing the target</strong></p>
+        <p class="tab"><br>3. NEUTRAL (it is unclear whether or not the writer supports the target opinion)</p>
+        <p class="helpText">The writer could be either in support of or against the target; the sentence does not reveal the writer&#39;s stance.</p>
+        </div>
+        </script>
+
+        <!-- comments view -->
+        <script id="comments-view" type="x-tmpl-mustache">
+        <div class="view">
+        <form>
+          {{# title }}
+          <h1 class="title">{{ title }}</h1>
+          {{/ title }}
+          <br>
+          {{# text }}
+          <section class="text-container">
+              <p class="text">{{ text }}</p>
+          </section>
+          {{/ text }}
+          <p class="comment-sect">
+              <textarea name="comments" id="comments"
+              rows="6" cols="110"></textarea>
+          </p>
+          <p class="comment-sect">
+              <label for="criticisms"><br><br>If you have any thoughts for how the task could be improved, or if parts of the task were confusing, please give your feedback here:<br></label>
+              <textarea name="criticisms" id="criticisms"
+              rows="6" cols="110"></textarea>
+          </p>
+          </form>
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+        </div>
+        </script>
+
+        <!-- post test view -->
+        <script id="post-test-view" type="x-tmpl-mustache">
+        <div class="view post-test-templ">
+            {{# title }}
+            <h1>{{ title }}</h1>
+            {{/ title }}
+            {{# text }}
+            <section class="text-container">
+                <h1 class="form-header">{{ text }}</p>
+            </section>
+            {{/ text }}
+            <form>
+                <p>
+                    <label for="HitCorrect">Did you read the instructions and do you think you did the HIT correctly?</label>
+                    <select id="HitCorrect" name="HitCorrect">
+                        <option></option>
+                        <option value="0">Yes</option>
+                        <option value="1">No</option>
+                        <option value="404">I was confused</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="HitFamiliar">Have you ever done a task similar to this HIT?</label>
+                    <select id="HitFamiliar" name="HitFamiliar">
+                        <option></option>
+                        <option value="0">Yes</option>
+                        <option value="1">No</option>
+                        <option value="404">Not sure</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="age">Age:</label>
+                    <input type="number" name="age" min="18" max="110" id="age" />
+                </p>
+                <p>
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender">
+                        <option></option>
+                        <option value="male">male</option>
+                        <option value="female">female</option>
+                        <option value="other">other</option>
+                        <option value="abstain">prefer not to say</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="education">Level of Education:</label>
+                    <select id="education" name="education">
+                        <option></option>
+                        <option value="graduated_high_school">Graduated High School</option>
+                        <option value="graduated_college">Graduated College</option>
+                        <option value="higher_degree">Higher Degree</option>
+                        <option value="other">Other</option>
+                        <option value="abstain">Prefer not to say</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="party">Political affiliation:</label>
+                    <select id="party" name="party">
+                        <option></option>
+                        <option value="republican">Republican</option>
+                        <option value="democrat">Democrat</option>
+                        <option value="independent">Independent</option>
+                        <option value="other">Other</option>
+                        <option value="abstain">Prefer not to say</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="state">State of residence:</label>
+                    <select id="state" name="state">
+                        <option></option>
+                      	<option value="AL">Alabama</option>
+                      	<option value="AK">Alaska</option>
+                      	<option value="AZ">Arizona</option>
+                      	<option value="AR">Arkansas</option>
+                      	<option value="CA">California</option>
+                      	<option value="CO">Colorado</option>
+                      	<option value="CT">Connecticut</option>
+                      	<option value="DE">Delaware</option>
+                      	<option value="DC">District Of Columbia</option>
+                      	<option value="FL">Florida</option>
+                      	<option value="GA">Georgia</option>
+                      	<option value="HI">Hawaii</option>
+                      	<option value="ID">Idaho</option>
+                      	<option value="IL">Illinois</option>
+                      	<option value="IN">Indiana</option>
+                      	<option value="IA">Iowa</option>
+                      	<option value="KS">Kansas</option>
+                      	<option value="KY">Kentucky</option>
+                      	<option value="LA">Louisiana</option>
+                      	<option value="ME">Maine</option>
+                      	<option value="MD">Maryland</option>
+                      	<option value="MA">Massachusetts</option>
+                      	<option value="MI">Michigan</option>
+                      	<option value="MN">Minnesota</option>
+                      	<option value="MS">Mississippi</option>
+                      	<option value="MO">Missouri</option>
+                      	<option value="MT">Montana</option>
+                      	<option value="NE">Nebraska</option>
+                      	<option value="NV">Nevada</option>
+                      	<option value="NH">New Hampshire</option>
+                      	<option value="NJ">New Jersey</option>
+                      	<option value="NM">New Mexico</option>
+                      	<option value="NY">New York</option>
+                      	<option value="NC">North Carolina</option>
+                      	<option value="ND">North Dakota</option>
+                      	<option value="OH">Ohio</option>
+                      	<option value="OK">Oklahoma</option>
+                      	<option value="OR">Oregon</option>
+                      	<option value="PA">Pennsylvania</option>
+                      	<option value="RI">Rhode Island</option>
+                      	<option value="SC">South Carolina</option>
+                      	<option value="SD">South Dakota</option>
+                      	<option value="TN">Tennessee</option>
+                      	<option value="TX">Texas</option>
+                      	<option value="UT">Utah</option>
+                      	<option value="VT">Vermont</option>
+                      	<option value="VA">Virginia</option>
+                      	<option value="WA">Washington</option>
+                      	<option value="WV">West Virginia</option>
+                      	<option value="WI">Wisconsin</option>
+                      	<option value="WY">Wyoming</option>
+                    </select>
+                </p>
+            <form>
+
+                {{# buttonText }}
+                <button id="next">{{ buttonText }}</button>
+                {{/ buttonText }}
+                {{^ buttonText }}
+                <button id="next">Next</button>
+                {{/ buttonText }}
+
+                <section class="answer-container">
+                    <p align="center" class="text" id="error" style="color: #FF0000">Please fill out all fields.</p>
+                </section>
+              </form>
+            </form>
+        </div>
+        </script>
+
+        <!-- pre-poll view -->
+        <script id="prepoll-view" type="x-tmpl-mustache">
+        <div class="view">
+        <form>
+          {{# title }}
+          <h1 class="title">{{ title }}</h1>
+          {{/ title }}
+          <br>
+          {{# text }}
+          <section class="text-container" text-align="left">
+              <p class="text">{{ text }}</p>
+          </section>
+          {{/ text }}
+
+          {{# button }}
+          <button id="next">{{ button }}</button>
+          {{/ button }}
+          {{^ button }}
+          <button id="next">Next</button>
+          {{/ button }}
+        </div>
+        </script>
+
+    <!-- poll 1 -->
+    <script id="poll1-view" type="x-tmpl-mustache">
+    <div class="view">
+    {{# title }}
+    <h1>{{ title }}</h1>
+    {{/ title }}
+    {{# text }}
+    <section class="text-container">
+        <h1 class="form-header">{{ text }}</p>
+    </section>
+    {{/ text }}
+    <form>
+    <p>
+        <label class="statement">1. Do you think that the world’s temperature has been going up over the past 100 years, or do you think this has not been happening?</label>
+    </p>
+    <p name="answer-box" class="poll-answer-container">
+        <input type="radio" name="happening" id="yes" value="indeed" />
+        <label>Probably has been happening</label>
+        <br><input type="radio" name="happening" id="no" value="not" />
+        <label>Probably has not been happening</label>
+    </p>
+      </form>
+
+      {{# button }}
+      <button id="next">{{ button }}</button>
+      {{/ button }}
+      {{^ button }}
+      <button id="next">Next</button>
+      {{/ button }}
+    </div>
+    </script>
+
+    <!-- poll2 -->
+    <script id="poll2-view" type="x-tmpl-mustache">
+    <div class="view">
+    {{# title }}
+    <h1>{{ title }}</h1>
+    {{/ title }}
+    {{# text }}
+    <section class="text-container">
+        <h1 class="form-header">{{ text }}</p>
+    </section>
+    {{/ text }}
+    <form>
+    <p>
+        <label class="statement">2. How sure are you that the world’s temperature has {{ negation }} been going up over the past 100 years?</label>
+    </p>
+    <p name="answer-box" class="poll-answer-container">
+        <input type="radio" name="certainty" value="extremely" />
+        <label>Extremely sure</label>
+        <br><input type="radio" name="certainty" value="very" />
+        <label>Very sure</label>
+        <br><input type="radio" name="certainty" value="moderately" />
+        <label>Moderately sure</label>
+        <br><input type="radio" name="certainty" value="somewhat" />
+        <label>Somewhat sure</label>
+        <br><input type="radio" name="certainty" value="not" />
+        <label>Not at all sure</label>
+    </p>
+      </form>
+
+      {{# button }}
+      <button id="next">{{ button }}</button>
+      {{/ button }}
+      {{^ button }}
+      <button id="next">Next</button>
+      {{/ button }}
+    </div>
+    </script>
+
+    <!-- poll3 -->
+    <script id="poll3-view" type="x-tmpl-mustache">
+    <div class="view">
+    {{# title }}
+    <h1>{{ title }}</h1>
+    {{/ title }}
+    {{# text }}
+    <section class="text-container">
+        <h1 class="form-header">{{ text }}</p>
+    </section>
+    {{/ text }}
+    <form>
+    <p>
+        <label class="statement">3. Do you think that changes in the world’s temperature over the past 100 years have been caused mostly by things people have done, mostly by natural causes, or about equally by things people have done and by natural causes?</label>
+    </p>
+    <p name="answer-box" class="poll-answer-container">
+        <input type="radio" name="causes" value="people" />
+        <label>Mostly by things people have done</label>
+        <br><input type="radio" name="causes" value="natural" />
+        <label>Mostly by natural causes</label>
+        <br><input type="radio" name="causes" value="equal" />
+        <label>About equally by people and natural causes</label>
+    </p>
+      </form>
+
+      {{# button }}
+      <button id="next">{{ button }}</button>
+      {{/ button }}
+      {{^ button }}
+      <button id="next">Next</button>
+      {{/ button }}
+    </div>
+    </script>
+
+    <!-- poll4 -->
+    <script id="poll4-view" type="x-tmpl-mustache">
+    <div class="view">
+    {{# title }}
+    <h1>{{ title }}</h1>
+    {{/ title }}
+    {{# text }}
+    <section class="text-container">
+        <h1 class="form-header">{{ text }}</p>
+    </section>
+    {{/ text }}
+    <form>
+    <p>
+        <label class="statement">4. In your opinion, do you think the federal government should or should not limit the
+amount of greenhouse gases that U.S. businesses put out?</label>
+    </p>
+    <p name="answer-box" class="poll-answer-container">
+        <input type="radio" name="govt" value="yes" />
+        <label>Federal government should limit</label>
+        <br><input type="radio" name="govt" value="no" />
+        <label>Federal government should not limit</label>
+    </p>
+      </form>
+
+      {{# button }}
+      <button id="next">{{ button }}</button>
+      {{/ button }}
+      {{^ button }}
+      <button id="next">Next</button>
+      {{/ button }}
+    </div>
+    </script>
+
+    <!-- poll5 -->
+    <script id="poll5-view" type="x-tmpl-mustache">
+    <div class="view">
+    {{# title }}
+    <h1>{{ title }}</h1>
+    {{/ title }}
+    {{# text }}
+    <section class="text-container">
+        <h1 class="form-header">{{ text }}</p>
+    </section>
+    {{/ text }}
+    <form>
+    <p>
+        <label class="statement">5. How concerned are you about global warming?</label>
+    </p>
+    <p name="answer-box" class="poll-answer-container">
+        <input type="radio" name="concern" value="extremely" />
+        <label>Extremely concerned</label>
+        <br><input type="radio" name="concern" value="very" />
+        <label>Very concerned</label>
+        <br><input type="radio" name="concern" value="moderately" />
+        <label>Moderately concerned</label>
+        <br><input type="radio" name="concern" value="somewhat" />
+        <label>Somewhat concerned</label>
+        <br><input type="radio" name="concern" value="not" />
+        <label>Not at all concerned</label>
+    </p>
+      </form>
+
+      {{# button }}
+      <button id="next">{{ button }}</button>
+      {{/ button }}
+      {{^ button }}
+      <button id="next">Next</button>
+      {{/ button }}
+    </div>
+    </script>
+
+    <!-- poll6 -->
+    <script id="poll6-view" type="x-tmpl-mustache">
+    <div class="view">
+    {{# title }}
+    <h1>{{ title }}</h1>
+    {{/ title }}
+    {{# text }}
+    <section class="text-container">
+        <h1 class="form-header">{{ text }}</p>
+    </section>
+    {{/ text }}
+    <form>
+    <p>
+        <label class="statement">6. During the past 6 months, how often did you hear about global warming in the media?</label>
+    </p>
+    <p name="answer-box" class="poll-answer-container">
+        <input type="radio" name="exposure" value="many_weekly" />
+        <label>Multiple times a week</label>
+        <br><input type="radio" name="exposure" value="weekly" />
+        <label>About once a week</label>
+        <br><input type="radio" name="exposure" value="month" />
+        <label>A couple times a month</label>
+        <br><input type="radio" name="exposure" value="year" />
+        <label>A couple times a year</label>
+        <br><input type="radio" name="exposure" value="never" />
+        <label>Never</label>
+    </p>
+      </form>
+
+      {{# button }}
+      <button id="next">{{ button }}</button>
+      {{/ button }}
+      {{^ button }}
+      <button id="next">Next</button>
+      {{/ button }}
+    </div>
+    </script>
+
+    <!-- poll7 -->
+    <script id="poll7-view" type="x-tmpl-mustache">
+    <div class="view">
+    {{# title }}
+    <h1>{{ title }}</h1>
+    {{/ title }}
+    {{# text }}
+    <section class="text-container">
+        <h1 class="form-header">{{ text }}</p>
+    </section>
+    {{/ text }}
+    <form>
+    <p>
+        <label class="statement">7. How accurately do you think the news media reports on global warming?</label>
+    </p>
+    <p name="answer-box" class="poll-answer-container">
+        <input type="radio" name="trust" value="extremely" />
+        <label>Extremely accurately</label>
+        <br><input type="radio" name="trust" value="very" />
+        <label>Very accurately</label>
+        <br><input type="radio" name="trust" value="moderately" />
+        <label>Moderately accurately</label>
+        <br><input type="radio" name="trust" value="somewhat" />
+        <label>Somewhat accurately</label>
+        <br><input type="radio" name="trust" value="not" />
+        <label>Not at all accurately</label>
+    </p>
+      </form>
+
+      {{# button }}
+      <button id="next">{{ button }}</button>
+      {{/ button }}
+      {{^ button }}
+      <button id="next">Next</button>
+      {{/ button }}
+    </div>
+    </script>
+
+    <!-- Thanks View -->
+    <script id="thanks-view" type="x-tmpl-mustache">
+        <div class="view thanks-templ">
+            <h4 class="warning-message">Please do not close this tab until you see a <strong>&#10004; Submission Successful</strong> message on the screen.</h4>
+            {{# thanksMessage }}
+            <h1 class="thanks-message nodisplay">{{ thanksMessage }}</h1>
+            {{/ thanksMessage }}
+            {{^ thanksMessage }}
+            <h1 class="thanks-message nodisplay">Thank you for taking part in this experiment!</h1>
+            {{/ thanksMessage }}
+            <h4 class="success-message nodisplay"><strong>&#10004; Submission Successful!</strong></h4>
+            {{# extraMessage }}
+            <h4 class="extra-message nodisplay">{{{ extraMessage }}}</h4>
+            {{/ extraMessage }}
+        </div>
+    </script>
+    </body>
+</html>
