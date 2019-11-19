@@ -734,7 +734,8 @@ var main = {
                 condition: exp.trial_info.main_trials[CT].condition,
                 trial_sent_id: exp.trial_info.main_trials[CT].sent_id,
                 option_chosen: $('input[name=answer]:checked').val(),
-                RT: RT
+                RT: RT,
+                df_index: exp.trial_info.main_trials[CT].df_key,
             };
             if (exp.trial_info.main_trials[CT].sent_id == 't19') {
               exp.trial_data.t19 = $('input[name=answer]:checked').val();
@@ -860,12 +861,6 @@ var postTest = {
             exp.global_data.state = $('#state').val();
             exp.global_data.endTime = Date.now();
             exp.global_data.timeSpent = (exp.global_data.endTime - exp.global_data.startTime) / 60000;
-            exp.global_data.likert1 = $('input[name=likert1]:checked').val();
-            exp.global_data.likert2 = $('input[name=likert2]:checked').val();
-            exp.global_data.likert3 = $('input[name=likert3]:checked').val();
-            exp.global_data.likert4 = $('input[name=likert4]:checked').val();
-            exp.global_data.likert5 = $('input[name=likert5]:checked').val();
-            exp.global_data.likert6 = $('input[name=likert6]:checked').val();
 
             // response correct
             if (exp.global_data.HitCorrect && exp.global_data.HitFamiliar && exp.global_data.age && exp.global_data.gender
