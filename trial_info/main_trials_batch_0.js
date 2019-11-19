@@ -31,6 +31,6 @@ var main_trials = [{"sentence": "Global warming is a hoax.", "option1": "agrees"
 {"sentence": "Doing so will be central for getting global warming under control.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t25", "df_key": 2388},
 {"sentence": "Global sea-level rise is both undeniable and consequential.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t26", "df_key": 15609},
 {"sentence": "Global warming isn\u2019t happening.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t27", "df_key": 2856},
-{"sentence": "Carbon dioxide will hit another record high in 201.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t28", "df_key": 2574},
+{"sentence": "Carbon dioxide will hit another record high in 2011.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t28", "df_key": 2574},
 {"sentence": "You now have a global marketplace for clean energy that is stable and accelerating.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t29", "df_key": 1858},
 ];
