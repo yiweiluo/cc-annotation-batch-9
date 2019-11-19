@@ -221,6 +221,7 @@ exp.submit = function() {
             name: 'assignmentId',
             value: HITData['assignmentId']
         }).appendTo(form);
+        console.log('Here!!');
     } else if (config_deploy.deployMethod === 'Prolific') {
         console.log();
     } else if (config_deploy.deployMethod === 'directLink'){
