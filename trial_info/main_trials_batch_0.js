@@ -21,7 +21,7 @@ var main_trials = [{"sentence": "Global warming is a hoax.", "option1": "agrees"
 {"sentence": "Simply reducing emissions will not sufficiently limit global warming.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "sent_id": "t15", "df_key": 2266},
 {"sentence": "Climate deniers blame global warming on aliens from outer space.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "sent_id": "t16", "df_key": 16267},
 {"sentence": "Global warming is inevitably going to be, at best, managed.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "sent_id": "t17", "df_key": 42},
-{"sentence": "Some parts of the world the world, such as the coast of California, saw sea levels fall.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "sent_id": "t18", "df_key": 15416},
+{"sentence": "Some parts of the world, such as the coast of California, saw sea levels fall.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "sent_id": "t18", "df_key": 15416},
 {"sentence": "If carbon dioxide emissions continue to rise beyond 2020, or even remain level, the temperature goals set in Paris become almost unattainable.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "sent_id": "t19", "df_key": 16512},
 {"sentence": "Millions more people around the world are threatened by river floods in coming decades due to climate change.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "sent_id": "t20", "df_key": 15523},
 {"sentence": "45% of the general public view perceived global warming as caused by humans.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "sent_id": "t21", "df_key": 16335},
