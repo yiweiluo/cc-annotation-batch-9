@@ -183,7 +183,7 @@ var practice1 = {
             option1: exp.trial_info.practice_trials[0].option1,
             option2: exp.trial_info.practice_trials[0].option2,
             option3: exp.trial_info.practice_trials[0].option3,
-            option4: exp.trial_info.practice_trials[0].option4
+
         }));
         var startingTime = Date.now();
         $('p[name=answer-box]').hide().delay(3000)
@@ -203,7 +203,7 @@ var practice1 = {
                 trial_type: "mainForcedChoice",
                 trial_number: CT + 1,
                 sentence: exp.trial_info.practice_trials[0].sentence,
-                condition: exp.trial_info.practice_trials[0].condition,
+
                 option_chosen: $('input[name=answer]:checked').val(),
                 RT: RT
             };
@@ -229,7 +229,7 @@ var practice2 = {
             option1: exp.trial_info.practice_trials[1].option1,
             option2: exp.trial_info.practice_trials[1].option2,
             option3: exp.trial_info.practice_trials[1].option3,
-            option4: exp.trial_info.practice_trials[1].option4
+
         }));
         var startingTime = Date.now();
         $('p[name=answer-box]').hide().delay(3000)
@@ -249,7 +249,7 @@ var practice2 = {
                 trial_type: "mainForcedChoice",
                 trial_number: CT + 1,
                 sentence: exp.trial_info.practice_trials[1].sentence,
-                condition: exp.trial_info.practice_trials[1].condition,
+
                 option_chosen: $('input[name=answer]:checked').val(),
                 RT: RT
             };
@@ -275,7 +275,7 @@ var practice3 = {
             option1: exp.trial_info.practice_trials[2].option1,
             option2: exp.trial_info.practice_trials[2].option2,
             option3: exp.trial_info.practice_trials[2].option3,
-            option4: exp.trial_info.practice_trials[2].option4
+
         }));
         var startingTime = Date.now();
         $('p[name=answer-box]').hide().delay(3000)
@@ -295,7 +295,7 @@ var practice3 = {
                 trial_type: "mainForcedChoice",
                 trial_number: CT + 1,
                 sentence: exp.trial_info.practice_trials[2].sentence,
-                condition: exp.trial_info.practice_trials[2].condition,
+
                 option_chosen: $('input[name=answer]:checked').val(),
                 RT: RT
             };
@@ -321,7 +321,7 @@ var practice4 = {
             option1: exp.trial_info.practice_trials[3].option1,
             option2: exp.trial_info.practice_trials[3].option2,
             option3: exp.trial_info.practice_trials[3].option3,
-            option4: exp.trial_info.practice_trials[3].option4
+
         }));
         var startingTime = Date.now();
         $('p[name=answer-box]').hide().delay(3000)
@@ -341,7 +341,7 @@ var practice4 = {
                 trial_type: "mainForcedChoice",
                 trial_number: CT + 1,
                 sentence: exp.trial_info.practice_trials[3].sentence,
-                condition: exp.trial_info.practice_trials[3].condition,
+
                 option_chosen: $('input[name=answer]:checked').val(),
                 RT: RT
             };
@@ -367,7 +367,7 @@ var practice5 = {
             option1: exp.trial_info.practice_trials[4].option1,
             option2: exp.trial_info.practice_trials[4].option2,
             option3: exp.trial_info.practice_trials[4].option3,
-            option4: exp.trial_info.practice_trials[4].option4
+
         }));
         var startingTime = Date.now();
         $('p[name=answer-box]').hide().delay(3000)
@@ -387,7 +387,7 @@ var practice5 = {
                 trial_type: "mainForcedChoice",
                 trial_number: CT + 1,
                 sentence: exp.trial_info.practice_trials[4].sentence,
-                condition: exp.trial_info.practice_trials[4].condition,
+
                 option_chosen: $('input[name=answer]:checked').val(),
                 RT: RT
             };
@@ -413,7 +413,7 @@ var practice6 = {
             option1: exp.trial_info.practice_trials[5].option1,
             option2: exp.trial_info.practice_trials[5].option2,
             option3: exp.trial_info.practice_trials[5].option3,
-            option4: exp.trial_info.practice_trials[5].option4
+
         }));
         var startingTime = Date.now();
         $('p[name=answer-box]').hide().delay(3000)
@@ -433,7 +433,7 @@ var practice6 = {
                 trial_type: "mainForcedChoice",
                 trial_number: CT + 1,
                 sentence: exp.trial_info.practice_trials[5].sentence,
-                condition: exp.trial_info.practice_trials[5].condition,
+
                 option_chosen: $('input[name=answer]:checked').val(),
                 RT: RT
             };
@@ -460,7 +460,7 @@ var feedback1 = {
             option1: exp.trial_info.practice_trials[0].option1,
             option2: exp.trial_info.practice_trials[0].option2,
             option3: exp.trial_info.practice_trials[0].option3,
-            option4: exp.trial_info.practice_trials[0].option4
+
         }));
         var startingTime = Date.now();
 
@@ -497,7 +497,7 @@ var feedback2 = {
             option1: exp.trial_info.practice_trials[1].option1,
             option2: exp.trial_info.practice_trials[1].option2,
             option3: exp.trial_info.practice_trials[1].option3,
-            option4: exp.trial_info.practice_trials[1].option4
+
         }));
         var startingTime = Date.now();
 
@@ -534,7 +534,7 @@ var feedback3 = {
             option1: exp.trial_info.practice_trials[2].option1,
             option2: exp.trial_info.practice_trials[2].option2,
             option3: exp.trial_info.practice_trials[2].option3,
-            option4: exp.trial_info.practice_trials[2].option4
+
         }));
         var startingTime = Date.now();
 
@@ -571,7 +571,7 @@ var feedback4 = {
             option1: exp.trial_info.practice_trials[3].option1,
             option2: exp.trial_info.practice_trials[3].option2,
             option3: exp.trial_info.practice_trials[3].option3,
-            option4: exp.trial_info.practice_trials[3].option4
+
         }));
         var startingTime = Date.now();
 
@@ -608,7 +608,6 @@ var feedback5 = {
             option1: exp.trial_info.practice_trials[4].option1,
             option2: exp.trial_info.practice_trials[4].option2,
             option3: exp.trial_info.practice_trials[4].option3,
-            option4: exp.trial_info.practice_trials[4].option4
         }));
         var startingTime = Date.now();
 
@@ -645,7 +644,6 @@ var feedback6 = {
             option1: exp.trial_info.practice_trials[5].option1,
             option2: exp.trial_info.practice_trials[5].option2,
             option3: exp.trial_info.practice_trials[5].option3,
-            option4: exp.trial_info.practice_trials[5].option4
         }));
         var startingTime = Date.now();
 
@@ -710,7 +708,6 @@ var main = {
             option1: exp.trial_info.main_trials[CT].option1,
             option2: exp.trial_info.main_trials[CT].option2,
             option3: exp.trial_info.main_trials[CT].option3,
-            option4: exp.trial_info.main_trials[CT].option4
         }));
         var startingTime = Date.now();
         var delayTime = exp.trial_info.main_trials[CT].sentence.length*25;
@@ -731,14 +728,10 @@ var main = {
             var RT = Date.now() - startingTime; // measure RT before anything else
             var trial_data = {
                 trial_number: CT + 1,
-                condition: exp.trial_info.main_trials[CT].condition,
                 trial_sent_id: exp.trial_info.main_trials[CT].sent_id,
                 option_chosen: $('input[name=answer]:checked').val(),
                 RT: RT,
                 df_index: exp.trial_info.main_trials[CT].df_key,
-            };
-            if (exp.trial_info.main_trials[CT].sent_id == 't19') {
-              exp.trial_data.t19 = $('input[name=answer]:checked').val();
             };
             exp.trial_data.push(trial_data);
             exp.findNextView();
@@ -762,7 +755,6 @@ var debrief = {
             title: this.title,
             text: this.text,
             button: this.buttonText,
-            t19_choice: exp.trial_data.t19,
             sentence: "There's no longer any serious doubt that climate change is real, accelerating, and caused by human activities."
         }));
 
