@@ -737,7 +737,7 @@ var main = {
             exp.findNextView();
         });
     },
-    trials : main_trials.length
+    trials : 1
 };
 
 var debrief = {
