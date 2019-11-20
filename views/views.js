@@ -683,8 +683,7 @@ var postPractice = {
             text: this.text,
             button: this.buttonText
         }));
-        exp.global_data.practiceEndTime = Date.now();
-        exp.global_data.practiceTimeSpent = (exp.global_data.practiceEndTime - exp.global_data.startTime) / 60000;
+        exp.global_data.practiceTimeSpent = (Date.now() - exp.global_data.startTime) / 60000;
 
         // moves to the next view
         $('#next').on('click', function() {
@@ -731,6 +730,7 @@ var main = {
                 trial_sent_id: exp.trial_info.main_trials[CT].sent_id,
                 option_chosen: $('input[name=answer]:checked').val(),
                 RT: RT,
+                df_index: exp.trial_info.main_trials[CT].df_key,
             };
             exp.trial_data.push(trial_data);
             exp.findNextView();
