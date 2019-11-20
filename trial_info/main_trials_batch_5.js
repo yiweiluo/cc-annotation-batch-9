@@ -6,7 +6,7 @@ var main_trials = [{"sentence": "Global warming is a hoax.", "option1": "agrees"
 {"sentence": "Coral reefs may be more resilient to global warming and bleaching than we think.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t0", "df_key": 2426},
 {"sentence": "The basics are clear long ago and the response to global warming is more about ethics and economics than data.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t1", "df_key": 632},
 {"sentence": "For most uses, the GHG footprint of shale gas is greater than that of other fossil fuels on time scales of up to 100 years.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t2", "df_key": 355},
-{"sentence": "Global warming global warming is natural.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t3", "df_key": 3218},
+{"sentence": "Global warming is natural.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t3", "df_key": 3218},
 {"sentence": "The Arctic ice cap is melting faster than is predicted even five years ago.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t4", "df_key": 16213},
 {"sentence": "The rate of global warming is accelerating.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t5", "df_key": 16432},
 {"sentence": "The Arctic ice cap is melting faster than is predicted even five years ago.", "option1": "agrees", "option2": "disagrees", "option3": "neutral", "condition": "true", "sent_id": "t6", "df_key": 483},
