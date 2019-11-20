@@ -731,13 +731,12 @@ var main = {
                 trial_sent_id: exp.trial_info.main_trials[CT].sent_id,
                 option_chosen: $('input[name=answer]:checked').val(),
                 RT: RT,
-                df_index: exp.trial_info.main_trials[CT].df_key,
             };
             exp.trial_data.push(trial_data);
             exp.findNextView();
         });
     },
-    trials : 1
+    trials : main_trials.length
 };
 
 var debrief = {
