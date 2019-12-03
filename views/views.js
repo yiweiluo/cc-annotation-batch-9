@@ -76,7 +76,7 @@ var intro = {
     "title": "Welcome!",
     // introduction text
     "text": "Thank you for participating in our study. You will be asked to infer how a writer feels towards climate change, based on a sentence they have written. You will then be asked about your own views. We are collecting \
-    these annotations of stance in order to conduct linguistic analyses of verbs. The task contains 35 sentences to annotate and will take you about 20-25 minutes to complete.",
+    these annotations of stance in order to conduct linguistic analyses of verbs. The task contains 45 sentences to annotate and will take you about 20-25 minutes to complete.",
     "legal_info": "<strong>LEGAL INFORMATION</strong>: You will be paid for your participation at the posted rate. There are no risks or benefits of any kind involved in this study.<br><br>If you have read \
     this form and decided to participate in this experiment, please understand that your participation is voluntary and you have the right to withdraw your consent or discontinue participation without penalty or \
   loss of benefits to which you are otherwise entitled. You have the right to refuse to do particular tasks. Your individual privacy will be maintained in all published and written data resulting from the study. \
