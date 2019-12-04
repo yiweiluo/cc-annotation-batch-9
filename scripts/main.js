@@ -18,12 +18,11 @@ exp.init = function() {
     // allocate storage room for global data, trial data, and trial info
     this.global_data = {};
     this.trial_data = [];
-    this.trial_data.t19 = [];
     this.trial_info = {};
 
     // record current date and time
     this.global_data.startDate = Date();
-    this.global_data.startTime = Date.now();
+    this.global_data.startT = Date.now();
 
     // call user-defined costumization function
     this.customize();
