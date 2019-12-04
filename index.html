@@ -777,22 +777,22 @@
                     <label for="education">Level of Education:</label>
                     <select id="education" name="education">
                         <option></option>
-                        <option value="graduated_high_school">Graduated High School</option>
-                        <option value="graduated_college">Graduated College</option>
-                        <option value="higher_degree">Higher Degree</option>
-                        <option value="other">Other</option>
-                        <option value="abstain">Prefer not to say</option>
+                        <option value="0">Graduated High School</option>
+                        <option value="1">Graduated College</option>
+                        <option value="2">Higher Degree</option>
+                        <option value="3">Other</option>
+                        <option value="4">Prefer not to say</option>
                     </select>
                 </p>
                 <p>
                     <label for="party">Political affiliation:</label>
                     <select id="party" name="party">
                         <option></option>
-                        <option value="republican">Republican</option>
-                        <option value="democrat">Democrat</option>
-                        <option value="independent">Independent</option>
-                        <option value="other">Other</option>
-                        <option value="abstain">Prefer not to say</option>
+                        <option value="0">Republican</option>
+                        <option value="1">Democrat</option>
+                        <option value="2">Independent</option>
+                        <option value="3">Other</option>
+                        <option value="4">Prefer not to say</option>
                     </select>
                 </p>
                 <p>
@@ -940,15 +940,15 @@
         <label class="statement">2. How sure are you that the world’s temperature has {{ negation }} been going up over the past 100 years?</label>
     </p>
     <p name="answer-box" class="poll-answer-container">
-        <input type="radio" name="certainty" value="extremely" />
+        <input type="radio" name="certainty" value="0" />
         <label>Extremely sure</label>
-        <br><input type="radio" name="certainty" value="very" />
+        <br><input type="radio" name="certainty" value="1" />
         <label>Very sure</label>
-        <br><input type="radio" name="certainty" value="moderately" />
+        <br><input type="radio" name="certainty" value="2" />
         <label>Moderately sure</label>
-        <br><input type="radio" name="certainty" value="somewhat" />
+        <br><input type="radio" name="certainty" value="3" />
         <label>Somewhat sure</label>
-        <br><input type="radio" name="certainty" value="not" />
+        <br><input type="radio" name="certainty" value="4" />
         <label>Not at all sure</label>
     </p>
       </form>
@@ -978,11 +978,11 @@
         <label class="statement">3. Do you think that changes in the world’s temperature over the past 100 years have been caused mostly by things people have done, mostly by natural causes, or about equally by things people have done and by natural causes?</label>
     </p>
     <p name="answer-box" class="poll-answer-container">
-        <input type="radio" name="causes" value="people" />
+        <input type="radio" name="causes" value="0" />
         <label>Mostly by things people have done</label>
-        <br><input type="radio" name="causes" value="natural" />
+        <br><input type="radio" name="causes" value="1" />
         <label>Mostly by natural causes</label>
-        <br><input type="radio" name="causes" value="equal" />
+        <br><input type="radio" name="causes" value="2" />
         <label>About equally by people and natural causes</label>
     </p>
       </form>
@@ -1013,9 +1013,9 @@
 amount of greenhouse gases that U.S. businesses put out?</label>
     </p>
     <p name="answer-box" class="poll-answer-container">
-        <input type="radio" name="govt" value="yes" />
+        <input type="radio" name="govt" value="0" />
         <label>Federal government should limit</label>
-        <br><input type="radio" name="govt" value="no" />
+        <br><input type="radio" name="govt" value="1" />
         <label>Federal government should not limit</label>
     </p>
       </form>
@@ -1045,15 +1045,15 @@ amount of greenhouse gases that U.S. businesses put out?</label>
         <label class="statement">5. How concerned are you about global warming?</label>
     </p>
     <p name="answer-box" class="poll-answer-container">
-        <input type="radio" name="concern" value="extremely" />
+        <input type="radio" name="concern" value="0" />
         <label>Extremely concerned</label>
-        <br><input type="radio" name="concern" value="very" />
+        <br><input type="radio" name="concern" value="1" />
         <label>Very concerned</label>
-        <br><input type="radio" name="concern" value="moderately" />
+        <br><input type="radio" name="concern" value="2" />
         <label>Moderately concerned</label>
-        <br><input type="radio" name="concern" value="somewhat" />
+        <br><input type="radio" name="concern" value="3" />
         <label>Somewhat concerned</label>
-        <br><input type="radio" name="concern" value="not" />
+        <br><input type="radio" name="concern" value="4" />
         <label>Not at all concerned</label>
     </p>
       </form>
@@ -1083,15 +1083,15 @@ amount of greenhouse gases that U.S. businesses put out?</label>
         <label class="statement">6. During the past 6 months, how often did you hear about global warming in the media?</label>
     </p>
     <p name="answer-box" class="poll-answer-container">
-        <input type="radio" name="exposure" value="many_weekly" />
+        <input type="radio" name="exposure" value="0" />
         <label>Multiple times a week</label>
-        <br><input type="radio" name="exposure" value="weekly" />
+        <br><input type="radio" name="exposure" value="1" />
         <label>About once a week</label>
-        <br><input type="radio" name="exposure" value="month" />
+        <br><input type="radio" name="exposure" value="2" />
         <label>A couple times a month</label>
-        <br><input type="radio" name="exposure" value="year" />
+        <br><input type="radio" name="exposure" value="3" />
         <label>A couple times a year</label>
-        <br><input type="radio" name="exposure" value="never" />
+        <br><input type="radio" name="exposure" value="4" />
         <label>Never</label>
     </p>
       </form>
@@ -1121,15 +1121,15 @@ amount of greenhouse gases that U.S. businesses put out?</label>
         <label class="statement">7. How accurately do you think the news media reports on global warming?</label>
     </p>
     <p name="answer-box" class="poll-answer-container">
-        <input type="radio" name="trust" value="extremely" />
+        <input type="radio" name="trust" value="0" />
         <label>Extremely accurately</label>
-        <br><input type="radio" name="trust" value="very" />
+        <br><input type="radio" name="trust" value="1" />
         <label>Very accurately</label>
-        <br><input type="radio" name="trust" value="moderately" />
+        <br><input type="radio" name="trust" value="2" />
         <label>Moderately accurately</label>
-        <br><input type="radio" name="trust" value="somewhat" />
+        <br><input type="radio" name="trust" value="3" />
         <label>Somewhat accurately</label>
-        <br><input type="radio" name="trust" value="not" />
+        <br><input type="radio" name="trust" value="4" />
         <label>Not at all accurately</label>
     </p>
       </form>
