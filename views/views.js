@@ -683,7 +683,7 @@ var postPractice = {
             text: this.text,
             button: this.buttonText
         }));
-        exp.global_data.practiceTimeSpent = (Date.now() - exp.global_data.startTime) / 60000;
+        //exp.global_data.practiceTimeSpent = (Date.now() - exp.global_data.startTime) / 60000;
 
         // moves to the next view
         $('#next').on('click', function() {
@@ -726,9 +726,8 @@ var main = {
         $('input[name=answer]').on('change', function() {
             var RT = Date.now() - startingTime; // measure RT before anything else
             var trial_data = {
-                trial_number: CT + 1,
-                trial_sent_id: exp.trial_info.main_trials[CT].sent_id,
-                option_chosen: $('input[name=answer]:checked').val().charAt(0),
+                s_id: exp.trial_info.main_trials[CT].sent_id,
+                a: $('input[name=answer]:checked').val().charAt(0),
                 RT: RT,
             };
             exp.trial_data.push(trial_data);
@@ -842,15 +841,15 @@ var postTest = {
             e.preventDefault();
 
             // records the post test info
-            exp.global_data.HitCorrect = $('#HitCorrect').val();
-            exp.global_data.HitFamiliar = $('#HitFamiliar').val();
+            exp.global_data.cor = $('#HitCorrect').val();
+            exp.global_data.fam = $('#HitFamiliar').val();
             exp.global_data.age = $('#age').val();
-            exp.global_data.gender = $('#gender').val().charAt(0);
-            exp.global_data.education = $('#education').val();
-            exp.global_data.party = $('#party').val();
-            exp.global_data.state = $('#state').val();
-            exp.global_data.endTime = Date.now();
-            exp.global_data.timeSpent = (exp.global_data.endTime - exp.global_data.startTime) / 60000;
+            exp.global_data.gen = $('#gender').val().charAt(0);
+            exp.global_data.ed = $('#education').val();
+            exp.global_data.pol = $('#party').val();
+            exp.global_data.st = $('#state').val();
+            exp.global_data.endT = Date.now();
+            exp.global_data.T = (exp.global_data.endT - exp.global_data.startT) / 60000;
 
             // response correct
             if (exp.global_data.HitCorrect && exp.global_data.HitFamiliar && exp.global_data.age && exp.global_data.gender
@@ -888,10 +887,10 @@ var poll1 = {
             e.preventDefault();
 
             // records the post test info
-            exp.global_data.poll1 = $('input[name=happening]:checked').val();
+            exp.global_data.p1 = $('input[name=happening]:checked').val();
 
             // response correct
-            if (exp.global_data.poll1) {
+            if (exp.global_data.p1) {
               //exp.global_data.botresponse = $('#listener-response').val();
               //exp.global_data.betwsubj = COMPETITOR_TYPICALITY;
               exp.findNextView();
@@ -917,7 +916,7 @@ var poll2 = {
         $('#main').html(Mustache.render(viewTemplate, {
             title: this.title,
             buttonText: this.buttonText,
-            negation: exp.global_data.poll1.trim(),
+            negation: exp.global_data.p1.trim(),
         }));
         $('#error').hide();
 
@@ -926,10 +925,10 @@ var poll2 = {
             e.preventDefault();
 
             // records the post test info
-            exp.global_data.poll2 = $('input[name=certainty]:checked').val();
+            exp.global_data.p2 = $('input[name=certainty]:checked').val();
 
             // response correct
-            if (exp.global_data.poll2) {
+            if (exp.global_data.p2) {
               //exp.global_data.botresponse = $('#listener-response').val();
               //exp.global_data.betwsubj = COMPETITOR_TYPICALITY;
               exp.findNextView();
@@ -963,10 +962,10 @@ var poll3 = {
             e.preventDefault();
 
             // records the post test info
-            exp.global_data.poll3 = $('input[name=causes]:checked').val();
+            exp.global_data.p3 = $('input[name=causes]:checked').val();
 
             // response correct
-            if (exp.global_data.poll3) {
+            if (exp.global_data.p3) {
               //exp.global_data.botresponse = $('#listener-response').val();
               //exp.global_data.betwsubj = COMPETITOR_TYPICALITY;
               exp.findNextView();
@@ -1000,10 +999,10 @@ var poll4 = {
             e.preventDefault();
 
             // records the post test info
-            exp.global_data.poll4 = $('input[name=govt]:checked').val();
+            exp.global_data.p4 = $('input[name=govt]:checked').val();
 
             // response correct
-            if (exp.global_data.poll4) {
+            if (exp.global_data.p4) {
               //exp.global_data.botresponse = $('#listener-response').val();
               //exp.global_data.betwsubj = COMPETITOR_TYPICALITY;
               exp.findNextView();
@@ -1037,10 +1036,10 @@ var poll5 = {
             e.preventDefault();
 
             // records the post test info
-            exp.global_data.poll5 = $('input[name=concern]:checked').val();
+            exp.global_data.p5 = $('input[name=concern]:checked').val();
 
             // response correct
-            if (exp.global_data.poll5) {
+            if (exp.global_data.p5) {
               //exp.global_data.botresponse = $('#listener-response').val();
               //exp.global_data.betwsubj = COMPETITOR_TYPICALITY;
               exp.findNextView();
@@ -1074,10 +1073,10 @@ var poll6 = {
             e.preventDefault();
 
             // records the post test info
-            exp.global_data.poll6 = $('input[name=exposure]:checked').val();
+            exp.global_data.p6 = $('input[name=exposure]:checked').val();
 
             // response correct
-            if (exp.global_data.poll6) {
+            if (exp.global_data.p6) {
               //exp.global_data.botresponse = $('#listener-response').val();
               //exp.global_data.betwsubj = COMPETITOR_TYPICALITY;
               exp.findNextView();
@@ -1111,10 +1110,10 @@ var poll7 = {
             e.preventDefault();
 
             // records the post test info
-            exp.global_data.poll7 = $('input[name=trust]:checked').val();
+            exp.global_data.p7 = $('input[name=trust]:checked').val();
 
             // response correct
-            if (exp.global_data.poll7) {
+            if (exp.global_data.p7) {
               //exp.global_data.botresponse = $('#listener-response').val();
               //exp.global_data.betwsubj = COMPETITOR_TYPICALITY;
               exp.findNextView();
