@@ -852,8 +852,8 @@ var postTest = {
             exp.global_data.T = (exp.global_data.endT - exp.global_data.startT) / 60000;
 
             // response correct
-            if (exp.global_data.HitCorrect && exp.global_data.HitFamiliar && exp.global_data.age && exp.global_data.gender
-            && exp.global_data.education && exp.global_data.party && exp.global_data.state) {
+            if (exp.global_data.cor && exp.global_data.fam && exp.global_data.age && exp.global_data.gen
+            && exp.global_data.ed && exp.global_data.pol && exp.global_data.st) {
               //exp.global_data.botresponse = $('#listener-response').val();
               //exp.global_data.betwsubj = COMPETITOR_TYPICALITY;
               exp.findNextView();
