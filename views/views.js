@@ -728,7 +728,7 @@ var main = {
             var trial_data = {
                 trial_number: CT + 1,
                 trial_sent_id: exp.trial_info.main_trials[CT].sent_id,
-                option_chosen: $('input[name=answer]:checked').val(),
+                option_chosen: $('input[name=answer]:checked').val().charAt(0),
                 RT: RT,
             };
             exp.trial_data.push(trial_data);
