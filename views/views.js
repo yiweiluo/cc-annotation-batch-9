@@ -735,7 +735,7 @@ var main = {
             exp.findNextView();
         });
     },
-    trials : 1
+    trials : main_trials.length
 };
 
 var debrief = {
