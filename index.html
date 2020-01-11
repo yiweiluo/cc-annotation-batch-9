@@ -29,13 +29,13 @@
         <script src="scripts/submit_to_server.js"></script>
 
         <!-- local trial_info files -->
-        <script src="trial_info/round_2_main_trials_batch_8.js"></script>
+        <script src="trial_info/round_3_main_trials_batch_8.js"></script>
         <script src="trial_info/practice_trials.js"></script>
 
         <!-- views -->
         <script src="views/views.js"></script>
 
-        <script src="//uniqueturker.myleott.com/lib.js" type="text/javascript"></script>
+        <!--<script src="//uniqueturker.myleott.com/lib.js" type="text/javascript"></script>
           <script type="text/javascript">
           $(document).ready(function(){
             var ut_id = "63a45753b5f206598d75b955a2240db4";
@@ -44,7 +44,7 @@
                 $("body").html("You have already completed the maximum number of HITs allowed by this requester. Please click 'Return HIT' to avoid any impact on your approval rating.");
             }
           });
-        </script>
+        </script>-->
 
     </head>
 
@@ -704,19 +704,14 @@
           <h1 class="title">{{ title }}</h1>
           {{/ title }}
           <br>
-          {{# text }}
-          <section class="text-container">
-              <p class="text">{{ text }}</p>
-          </section>
-          {{/ text }}
+          
           <p class="comment-sect">
-              <textarea name="comments" id="comments"
-              rows="6" cols="110"></textarea>
-          </p>
+              <label for="criticisms"><br><br>Thank you for completing the task! If you have any general comments on the task that you'd like to leave, please do so below.<br></label>
+              <input type="tel" style="margin-left: 35px" size="80" maxlength="75" id='comments' name='comments'/>
+          </p> 
           <p class="comment-sect">
               <label for="criticisms"><br><br>If you have any thoughts for how the task could be improved, or if parts of the task were confusing, please give your feedback here:<br></label>
-              <textarea name="criticisms" id="criticisms"
-              rows="6" cols="110"></textarea>
+              <input type="tel" style="margin-left: 35px" size="80" maxlength="75" id='criticisms' name='criticisms'/>
           </p>
           </form>
 
